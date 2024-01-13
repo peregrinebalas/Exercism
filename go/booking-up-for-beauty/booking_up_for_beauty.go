@@ -28,8 +28,8 @@ func IsAfternoonAppointment(date string) bool {
 
 // Description returns a formatted string of the appointment time.
 func Description(date string) string {
-	t := Schedule(date)
-	return fmt.Sprintf("You have an appointment on %s, %s %d, %d, at %d:%d.", t.Weekday(), t.Month(), t.Day(), t.Year(), t.Hour(), t.Minute())
+	t := parse("1/2/2006 15:04:05", date)
+	return fmt.Sprintf("You have an appointment on %s", t.Format("Monday, January 2, 2006, at 15:04."))
 }
 
 // AnniversaryDate returns a Time with this year's anniversary.
@@ -40,7 +40,7 @@ func AnniversaryDate() time.Time {
 func parse(layout string, date string) time.Time {
 	t, err := time.Parse(layout, date)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 	return t
 }
