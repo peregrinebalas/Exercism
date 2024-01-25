@@ -16,7 +16,6 @@ class ConnectTest < Minitest::Test
   end
 
   def test_x_can_win_on_a_1x1_board
-    skip
     board = [
       'X'
     ].map { |row| row.gsub(/^ */, '') }
@@ -25,7 +24,6 @@ class ConnectTest < Minitest::Test
   end
 
   def test_o_can_win_on_a_1x1_board
-    skip
     board = [
       'O'
     ].map { |row| row.gsub(/^ */, '') }
@@ -34,7 +32,6 @@ class ConnectTest < Minitest::Test
   end
 
   def test_only_edges_does_not_make_a_winner
-    skip
     board = [
       'O O O X',
       ' X . . X',
