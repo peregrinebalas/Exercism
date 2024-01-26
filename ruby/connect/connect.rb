@@ -1,5 +1,3 @@
-require 'pry'
-
 class Board
     attr_reader :board
 
@@ -59,8 +57,6 @@ class Board
         area[:left] == cell ||
         area[:right] == cell
     end
-
-    # XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
     def x_left_to_right?
         if x_left? then
