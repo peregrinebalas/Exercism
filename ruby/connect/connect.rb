@@ -1,6 +1,9 @@
 class Board
     attr_reader :board
 
+    X = 'X'
+    O = 'O'
+
     def initialize(board)
         @board = parse_board(board)
     end
@@ -9,9 +12,9 @@ class Board
         if board.length == 1 then
             board[0][0]
         elsif x_left_to_right? then
-            'X'
+            X
         elsif o_top_to_bottom? then
-            'O'
+            O
         else
             return ''
         end
@@ -39,10 +42,10 @@ class Board
     end
 
     def opposition(cell)
-        if cell == 'X' then
-            'O'
-        elsif cell == 'O' then
-            'X'
+        if cell == X then
+            O
+        elsif cell == O then
+            X
         else
             '.'
         end
@@ -65,7 +68,7 @@ class Board
     end
 
     def x_left?
-        board.any? { |row| row[0] == 'X' }
+        board.any? { |row| row[0] == X }
     end
 
     def x_crosses?
@@ -74,7 +77,7 @@ class Board
         board.each_with_index do |row, row_i|
             valid_connections = []
             row.each_with_index do |cell, i|
-                if cell == 'X' && x_valid_step?(cell, row_i, i) then
+                if cell == X && x_valid_step?(cell, row_i, i) then
                     outcome[i] = cell
                     valid_connections << true
                 else
@@ -83,12 +86,12 @@ class Board
             end
 
             no_connections = valid_connections.all? { |c| c == false }
-            connection_made = outcome.all? { |cell| cell == 'X' }
+            connection_made = outcome.all? { |cell| cell == X }
             if (no_connections && !connection_made) then
                 outcome = ('.' * board[0].length).split('')
             end
         end
-        outcome.all? { |cell| cell == 'X' }
+        outcome.all? { |cell| cell == X }
     end
 
     def x_valid_step?(cell, row, column)
@@ -101,26 +104,12 @@ class Board
         opposition = opposition(cell)
 
         x_unblocked_top_right?(cell, opposition, area) ||
-        x_unblocked_bottom_right?(cell, opposition, area) ||
-        x_unblocked_top_left?(cell, opposition, area) ||
         x_unblocked_bottom_left?(cell, opposition, area)
     end
 
     def x_unblocked_top_right?(cell, opposition, area)
         (area[:top_right] && area[:top_right] == cell) &&
         ((area[:right] && area[:right] != opposition) &&
-        (area[:top] && area[:top] != opposition))
-    end
-
-    def x_unblocked_bottom_right?(cell, opposition, area)
-        (area[:bottom_right] && area[:bottom_right] == cell) &&
-        ((area[:right] && area[:right] != opposition) &&
-        (area[:bottom] && area[:bottom] != opposition))
-    end
-
-    def x_unblocked_top_left?(cell, opposition, area)
-        (area[:top_left] && area[:top_left] == cell) &&
-        ((area[:left] && area[:left] != opposition) &&
         (area[:top] && area[:top] != opposition))
     end
 
@@ -139,7 +128,7 @@ class Board
     end
 
     def o_top?
-        board[0].any? { |column| column == 'O' }
+        board[0].any? { |column| column == O }
     end
 
     def o_crosses?
@@ -148,7 +137,7 @@ class Board
         board.each_with_index do |row, row_i|
             valid_connections = []
             row.each_with_index do |cell, i|
-                if cell == 'O' && o_valid_step?(cell, row_i, i) then
+                if cell == O && o_valid_step?(cell, row_i, i) then
                     outcome[row_i] = cell
                     valid_connections << true
                 else
@@ -157,13 +146,13 @@ class Board
             end
 
             no_connections = valid_connections.all? { |c| c == false }
-            connection_made = outcome.all? { |cell| cell == 'X' }
+            connection_made = outcome.all? { |cell| cell == X }
             if (no_connections && !connection_made) then
                 outcome = ('.' * board.length).split('')
             end
         end
 
-        outcome.all? { |cell| cell == 'O' }
+        outcome.all? { |cell| cell == O }
     end
 
     def o_valid_step?(cell, row, column)
@@ -176,8 +165,6 @@ class Board
         opposition = opposition(cell)
 
         o_unblocked_top_right?(cell, opposition, area) ||
-        o_unblocked_bottom_right?(cell, opposition, area) ||
-        o_unblocked_top_left?(cell, opposition, area) ||
         o_unblocked_bottom_left?(cell, opposition, area)
     end
 
@@ -185,19 +172,9 @@ class Board
         (area[:top_right] && area[:top_right] == cell)
     end
 
-    def o_unblocked_bottom_right?(cell, opposition, area)
-        (area[:bottom_right] && area[:bottom_right] == cell)
-    end
-
-    def o_unblocked_top_left?(cell, opposition, area)
-        (area[:top_left] && area[:top_left] == cell)
-       ((area[:left] && area[:left] != opposition) ||
-       (area[:top] && area[:top] != opposition))
-    end
-
     def o_unblocked_bottom_left?(cell, opposition, area)
-        (area[:bottom_left] && area[:bottom_left] == cell)
-       ((area[:left] && area[:left] != opposition) ||
-       (area[:bottom] && area[:bottom] != opposition))
+        (area[:bottom_left] && area[:bottom_left] == cell) && 
+        ((area[:left] && area[:left] != opposition) ||
+        (area[:bottom] && area[:bottom] != opposition))
     end
 end
