@@ -55,7 +55,6 @@ class ConnectTest < Minitest::Test
   end
 
   def test_nobody_wins_crossing_adjacent_angles
-    skip
     board = [
       'X . . .',
       ' . X O .',
@@ -80,7 +79,6 @@ class ConnectTest < Minitest::Test
   end
 
   def test_o_wins_crossing_from_top_to_bottom
-    skip
     board = [
       '. O . .',
       ' O X X X',
