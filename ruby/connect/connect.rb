@@ -8,47 +8,41 @@ class Board
         @game = game.map { |row| row.split(" ") }
         @winner = ''
 
-        pathfinding(X, @game.transpose)
-        pathfinding(O, @game)
+        find_path(X, @game.transpose)
+        find_path(O, @game)
     end
 
     private
 
-    def pathfinding(type, board)
+    def find_path(type, board)
         @board = board
-        @xmax = board[0].length - 1
-        @ymax = board.length - 1
+        @xmax = board.length - 1
+        @ymax = board[0].length - 1
+        @traversed = []
 
-        board[0].each_with_index do |cell, i|
-            win_if_connected(type, 0, i)
-            if cell == type && !game_over?
-                connection?(0, i)
-            end
+        @board[0].each_with_index do |cell, i|
+            break if winner?(type, 0, i) 
+            break if connection?(0, i) if cell == type
         end
-    end
-
-    def game_over?
-        @winner != ''
     end
 
     def connection?(x, y)
         cell = @board[x][y]
         area = area(x, y)
-        pp area
-        pp @board
         area.each do |ax, ay|
-            if inside_board?(ax, ay) && !game_over? then
-                win_if_connected(cell, ax, ay)
+            if inside_board?(ax, ay) && !@traversed.any?([ax, ay]) then
+                break if winner?(cell, ax, ay)
             end
         end
-        game_over?
+        @winner != ''
     end
 
-    def win_if_connected(cell, x, y)
-        if @board[x][y] == cell && x == @xmax then
+    def winner?(cell, x, y)
+        if @board[x] && @board[x][y] == cell && x == @xmax then
             @winner = cell
-        elsif @board[x][y] == cell then
-            @board[x][y] = cell + "."
+            true
+        elsif @board[x] && @board[x][y] == cell then
+            @traversed << [x, y]
             connection?(x, y)
         end
     end

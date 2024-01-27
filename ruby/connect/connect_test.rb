@@ -78,7 +78,6 @@ class ConnectTest < Minitest::Test
   end
 
   def test_o_wins_crossing_from_top_to_bottom
-    skip
     board = [
       '. O . .',
       ' O X X X',
@@ -91,7 +90,6 @@ class ConnectTest < Minitest::Test
   end
 
   def test_x_wins_using_a_convoluted_path
-    skip
     board = [
       '. X X . .',
       ' X . X . X',
@@ -104,7 +102,6 @@ class ConnectTest < Minitest::Test
   end
 
   def test_x_wins_using_a_spiral_path
-    skip
     board = [
       'O X X X X X X X X',
       ' O X O O O O O O O',
