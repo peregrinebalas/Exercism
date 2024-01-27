@@ -1,15 +1,12 @@
 class Board
     attr_reader :game, :winner
 
-    X = 'X'
-    O = 'O'
-
     def initialize(game)
         @game = game.map { |row| row.split(" ") }
         @winner = ''
 
-        find_path(X, @game.transpose)
-        find_path(O, @game)
+        find_path(?X, @game.transpose)
+        find_path(?O, @game)
     end
 
     private
@@ -30,18 +27,14 @@ class Board
         cell = @board[x][y]
         area = area(x, y)
         area.each do |ax, ay|
-            if inside_board?(ax, ay) && !@traversed.any?([ax, ay]) then
-                break if winner?(cell, ax, ay)
-            end
+            break if winner?(cell, ax, ay) if inside_board?(ax, ay) && !@traversed.any?([ax, ay])
         end
         @winner != ''
     end
 
     def winner?(cell, x, y)
-        if @board[x] && @board[x][y] == cell && x == @xmax then
-            @winner = cell
-            true
-        elsif @board[x] && @board[x][y] == cell then
+        if @board[x] && @board[x][y] == cell then
+            @winner = cell if x == @xmax
             @traversed << [x, y]
             connection?(x, y)
         end
