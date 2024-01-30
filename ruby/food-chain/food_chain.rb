@@ -1,70 +1,28 @@
 class FoodChain
-    @@rhymes = {
-       fly: "I don't know why she swallowed the fly.",
-       spider: "It wriggled and jiggled and tickled inside her.",
-       bird: "How absurd to swallow a bird!",
-       cat: "Imagine that, to swallow a cat!",
-       dog: "What a hog, to swallow a dog!",
-       goat: "Just opened her throat and swallowed a goat!",
-       cow: "I don't know how she swallowed a cow!",
-       horse: "She's dead, of course!"
-    }
-
-    def swallowed_lyric(predator, prey)
-        "She swallowed the #{predator} to catch the #{prey}"
-    end
+    @@animal_lyrics = [
+       {fly: "I don't know why she swallowed the fly.\n"},
+       {spider: "wriggled and jiggled and tickled inside her.\n"},
+       {bird: "How absurd to swallow a bird!\n"},
+       {cat: "Imagine that, to swallow a cat!\n"},
+       {dog: "What a hog, to swallow a dog!\n"},
+       {goat: "Just opened her throat and swallowed a goat!\n"},
+       {cow: "I don't know how she swallowed a cow!\n"},
+       {horse: "She's dead, of course!\n"}
+    ]
 
     def self.song
-"\"I know an old lady who swallowed a fly.
-I don't know why she swallowed the fly. Perhaps she'll die.
+        verses = @@animal_lyrics.map.with_index do |(animal, rhyme), i|
+            
+        end
+    end
 
-I know an old lady who swallowed a spider.
-It wriggled and jiggled and tickled inside her.
-She swallowed the spider to catch the fly.
-I don't know why she swallowed the fly. Perhaps she'll die.
+    private
 
-I know an old lady who swallowed a bird.
-How absurd to swallow a bird!
-She swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.
-She swallowed the spider to catch the fly.
-I don't know why she swallowed the fly. Perhaps she'll die.
+    def self.old_lady_lyric(animal)
+        "I know an old lady who swallowed a #{animal}."
+    end
 
-I know an old lady who swallowed a cat.
-Imagine that, to swallow a cat!
-She swallowed the cat to catch the bird.
-She swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.
-She swallowed the spider to catch the fly.
-I don't know why she swallowed the fly. Perhaps she'll die.
-
-I know an old lady who swallowed a dog.
-What a hog, to swallow a dog!
-She swallowed the dog to catch the cat.
-She swallowed the cat to catch the bird.
-She swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.
-She swallowed the spider to catch the fly.
-I don't know why she swallowed the fly. Perhaps she'll die.
-
-I know an old lady who swallowed a goat.
-Just opened her throat and swallowed a goat!
-She swallowed the goat to catch the dog.
-She swallowed the dog to catch the cat.
-She swallowed the cat to catch the bird.
-She swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.
-She swallowed the spider to catch the fly.
-I don't know why she swallowed the fly. Perhaps she'll die.
-
-I know an old lady who swallowed a cow.
-I don't know how she swallowed a cow!
-She swallowed the cow to catch the goat.
-She swallowed the goat to catch the dog.
-She swallowed the dog to catch the cat.
-She swallowed the cat to catch the bird.
-She swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.
-She swallowed the spider to catch the fly.
-I don't know why she swallowed the fly. Perhaps she'll die.
-
-I know an old lady who swallowed a horse.
-She's dead, of course!
-\""
+    def self.swallowed_lyric(predator, prey)
+        "She swallowed the #{predator} to catch the #{prey}"
     end
 end
