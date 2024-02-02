@@ -1,7 +1,23 @@
-=begin
-Write your code for the 'Run Length Encoding' exercise in this file. Make the tests in
-`run_length_encoding_test.rb` pass.
+class RunLengthEncoding
+    def self.encode(input)
+        chunks = input.split('').slice_when do |before, after|
+            before != after
+        end
 
-To get started with TDD, see the `README.md` file in your
-`ruby/run-length-encoding` directory.
-=end
+        chunks.reduce("") do |output, chunk|
+            output << (chunk.length == 1 ? chunk[0] : "#{chunk.length}#{chunk[0]}")
+        end
+    end
+
+    def self.decode(input)
+        pp input
+
+        chunks = input.partition(/(\d.{1}|.)/)
+
+        pp chunks.to_a
+
+        chunks.reduce("") do |output, chunk|
+            output << (chunk.length == 1 ? chunk[0] : chunk * chunk.length)
+        end
+    end
+end
