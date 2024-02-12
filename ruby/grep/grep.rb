@@ -15,11 +15,6 @@ class Grep
 
     private
 
-    def self.pattern_match?(line, pattern, flags)
-        line, pattern = [line.upcase, pattern.upcase] if flags[:i]
-        flags[:x] ? line == pattern : line.include?(pattern)
-    end
-
     def self.add_line?(pattern, line, flags)
         (!flags[:v] && pattern_match?(line, pattern, flags)) ||
         (flags[:v] && !pattern_match?(line, pattern, flags))
@@ -32,5 +27,10 @@ class Grep
         else
             file
         end
+    end
+
+    def self.pattern_match?(line, pattern, flags)
+        line, pattern = [line.upcase, pattern.upcase] if flags[:i]
+        flags[:x] ? line == pattern : line.include?(pattern)
     end
 end
