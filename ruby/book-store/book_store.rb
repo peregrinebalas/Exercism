@@ -1,15 +1,14 @@
 module BookStore
     @@cost = 8
-    @@base_discount = 0.05
 
     def self.calculate_price(basket)
         counts = basket.reduce(Hash.new(0)) { |counts, book| counts[book] += 1; counts }
-        calculate_total(basket.sort_by { |book| counts[book] })
+        checkout(basket.sort_by { |book| counts[book] })
     end
 
     private
 
-    def self.calculate_total(basket)
+    def self.checkout(basket)
         batch_books(basket.reverse).reduce(0) do |total, batch|
             price = batch.size * @@cost
             total += price - discount(batch.size) * price
@@ -33,9 +32,9 @@ module BookStore
     def self.discount(group)
         case group
         when 4,5
-             (group * @@base_discount)
+             (group * 0.05)
         when 2,3
-            ((group - 1) * @@base_discount)
+            ((group - 1) * 0.05)
         else
             0
         end
