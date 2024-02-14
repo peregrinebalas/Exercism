@@ -38,13 +38,11 @@ class BookStoreTest < Minitest::Test
   end
 
   def test_two_groups_of_four_is_cheaper_than_group_of_five_plus_group_of_three
-    skip
     basket = [1, 1, 2, 2, 3, 3, 4, 5]
     assert_in_delta 51.20, BookStore.calculate_price(basket), 0.001
   end
 
   def test_two_groups_of_four_is_cheaper_than_groups_of_five_and_three
-    skip
     basket = [1, 1, 2, 3, 4, 4, 5, 5]
     assert_in_delta 51.20, BookStore.calculate_price(basket), 0.001
   end
@@ -75,13 +73,11 @@ class BookStoreTest < Minitest::Test
   end
 
   def test_four_groups_of_four_are_cheaper_than_two_groups_each_of_five_and_three
-    skip
     basket = [1, 1, 2, 2, 3, 3, 4, 5, 1, 1, 2, 2, 3, 3, 4, 5]
     assert_in_delta 102.40, BookStore.calculate_price(basket), 0.001
   end
 
   def test_check_that_groups_of_four_are_created_properly_even_when_there_are_more_groups_of_three_than_groups_of_five
-    skip
     basket = [1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5]
     assert_in_delta 145.60, BookStore.calculate_price(basket), 0.001
   end
