@@ -24,9 +24,40 @@ Item = Struct.new(:name, :sell_in, :quality) do
   end
 
   def quality_decrease_exempt?
-    self.aged_brie? ||
-    self.backstage_passes? ||
-    self.sulfuras?
+    aged_brie? || backstage_passes? || sulfuras?
+  end
+
+  def zero_on_expire?
+    conjured? || backstage_passes?
+  end
+
+  def quality_shift
+    base = backstage_passes? ? backstage_pass_margin : expired? ? 2 : 1
+
+    if !quality_decrease_exempt?
+      base = conjured? ? base * 2 : base
+      cap_subtraction(base * -1)
+    elsif !sulfuras? && self.quality < 50
+      cap_addition(base)
+    end
+  end
+
+  def cap_addition(margin)
+    self.quality + margin > 50 ? 50 - self.quality : margin
+  end
+
+  def cap_subtraction(margin)
+    self.quality + margin < 0 ? self.quality * -1 : margin
+  end
+
+  def backstage_pass_margin
+    margin =
+      case self.sell_in
+      when 1..5; 3
+      when 6..10; 2
+      else; 1
+      end
+    conjured? ? margin -= 1 : margin
   end
 end
 
@@ -43,56 +74,15 @@ class GildedRose
   end
 
   def update_sell_in(item)
-    if !item.sulfuras? || item.conjured? then
-      item.sell_in -= 1
-    end
+    item.sell_in -= 1 if !item.sulfuras? || item.conjured?
   end
 
   def update_quality(item)
-    if zero_on_expire?(item) && item.expired?
+    if item.zero_on_expire? && item.expired?
       item.quality = 0
     else
-      margin = calculate_quality_margin(item)
-
+      margin = item.quality_shift
       item.quality += margin if margin
     end
-  end
-
-  def zero_on_expire?(item)
-    item.conjured? || item.backstage_passes?
-  end
-
-  def calculate_quality_margin(item)
-    base =
-    if item.backstage_passes? then
-      backstage_pass_margin(item)
-    else
-      item.expired? ? 2 : 1
-    end
-
-    if !item.quality_decrease_exempt?
-      base = item.conjured? ? base * 2 : base
-      cap_subtraction(item, base * -1)
-    elsif !item.sulfuras? && item.quality < 50
-      cap_addition(item, base)
-    end
-  end
-
-  def backstage_pass_margin(item)
-    margin =
-    case item.sell_in
-    when 1..5; 3
-    when 6..10; 2
-    else; 1
-    end
-    item.conjured? ? margin -= 1 : margin
-  end
-
-  def cap_addition(item, margin)
-    item.quality + margin > 50 ? 50 - item.quality : margin
-  end
-
-  def cap_subtraction(item, margin)
-    item.quality + margin < 0 ? item.quality * -1 : margin
   end
 end
