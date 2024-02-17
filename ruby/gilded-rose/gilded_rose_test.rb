@@ -6,8 +6,8 @@ class GildedRoseTest < Minitest::Test
     item = Item.new(name:, sell_in:, quality:)
     GildedRose.new([item]).update!
 
-    assert_equal sell_in + sell_in_change, item.sell_in
-    assert_equal quality + quality_change, item.quality
+    assert_equal sell_in + sell_in_change, item.sell_in, "item.sell_in: #{item.sell_in}, sell_in_change: #{sell_in_change}, sell_in: #{sell_in}"
+    assert_equal quality + quality_change, item.quality, "item.quality: #{item.quality}, quality_change: #{quality_change}, quality: #{quality}"
   end
 
   def test_normal_item_before_sell_date
