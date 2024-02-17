@@ -1,10 +1,6 @@
 Item = Struct.new(:name, :sell_in, :quality) do
-  def increase_quality(amount = 1)
+  def update_quality(amount = 1)
     self.quality += amount
-  end
-
-  def decrease_quality(amount = 1)
-    self.quality -= amount
   end
 
   def decrease_sell_in
@@ -12,7 +8,7 @@ Item = Struct.new(:name, :sell_in, :quality) do
   end
 
   def has_quality?
-    self.quality >= 0
+    self.quality > 0
   end
 
   def sulfuras?
@@ -49,7 +45,7 @@ class GildedRose
 
   def update!
     @items.each do |item|
-      update_quality(item) if item.has_quality?
+      update_quality(item) 
       update_sell_in(item)
     end
   end
@@ -61,19 +57,16 @@ class GildedRose
   end
 
   def update_quality(item)
-    
-
     if zero_on_expire?(item) && item.expired?
-      
       item.quality = 0
     else
       margin = calculate_quality_margin(item)
       if !item.quality_decrease_exempt?
-        margin = item.conjured? ? margin * 2 : margin
-        item.decrease_quality(margin)
+        margin = cap_margin(item, margin * -1)
+        item.update_quality(margin) if item.has_quality?
       elsif !item.sulfuras? && item.quality < 50
-
-        item.increase_quality(margin)
+        margin = cap_margin(item, margin)
+        item.update_quality(margin)
       end
     end
   end
@@ -89,8 +82,6 @@ class GildedRose
     else
       item.expired? ? 2 : 1
     end
-
-    cap_margin(item, margin)
   end
 
   def backstage_pass_margin(item)
@@ -104,10 +95,23 @@ class GildedRose
   end
 
   def cap_margin(item, margin)
+    if margin > 0 then
+      cap_addition(item, margin)
+    else
+      cap_subtraction(item, margin)
+    end
+  end
+
+  def cap_addition(item, margin)
     if item.quality + margin > 50 then
       50 - item.quality
     else
       margin
     end
+  end
+
+  def cap_subtraction(item, margin)
+    margin = item.conjured? ? margin * 2 : margin
+    item.quality + margin < 0 ? item.quality * -1 : margin
   end
 end
