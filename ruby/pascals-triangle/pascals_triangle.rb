@@ -9,20 +9,11 @@ class Triangle
 
     def generate_rows(rows, n)
         if rows.size < n then
-            previous_row = rows.last
-            row = Array.new(previous_row.size + 1)
-            rows << row.map.with_index do |_,index|
-                a = get_value(previous_row, index)
-                b = get_value(previous_row, index - 1)
-                a + b
-            end
+            row = [0] + rows.last + [0]
+            rows << row.each_cons(2).map {|a,b| a + b}
             generate_rows(rows, n)
         else
             rows
         end
-    end
-
-    def get_value(row, index)
-        row[index] && index >= 0 ? row[index] : 0
     end
 end
