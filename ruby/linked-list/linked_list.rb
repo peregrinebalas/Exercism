@@ -1,5 +1,1 @@
-class Deque < Array
-    def initialize
-        super
-    end
-end
+class Deque < Array; end
